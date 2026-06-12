@@ -7,6 +7,10 @@ const supabase = createClient(
 
 export default async function handler(req, res) {
   try {
+    if (tomorrow.getMonth() !== today.getMonth()) {
+    // hari terakhir bulan
+    // insert snapshot
+    }
     const { data: accounts, error } = await supabase
       .from("account_monitor")
       .select("*");
