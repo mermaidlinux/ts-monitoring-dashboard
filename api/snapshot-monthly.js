@@ -7,10 +7,22 @@ const supabase = createClient(
 
 export default async function handler(req, res) {
   try {
-    if (tomorrow.getMonth() !== today.getMonth()) {
-    // hari terakhir bulan
-    // insert snapshot
+    const todayDate = new Date();
+    const tomorrowDate = new Date(todayDate);
+
+    tomorrowDate.setDate(todayDate.getDate() + 1);
+
+    const isLastDayOfMonth =
+      tomorrowDate.getMonth() !== todayDate.getMonth();
+
+    if (!isLastDayOfMonth) {
+      return res.json({
+        ok: true,
+        skipped: true,
+        message: "Not last day of month",
+      });
     }
+
     const { data: accounts, error } = await supabase
       .from("account_monitor")
       .select("*");
@@ -19,13 +31,12 @@ export default async function handler(req, res) {
       return res.status(500).json({ ok: false, error: error.message });
     }
 
-    const now = new Date();
-    const today = now.toISOString().slice(0, 10);
-    const month = today.slice(0, 7);
+    const snapshotDate = todayDate.toISOString().slice(0, 10);
+    const snapshotMonth = snapshotDate.slice(0, 7);
 
     const rows = (accounts || []).map((acc) => ({
-      snapshot_month: month,
-      snapshot_date: today,
+      snapshot_month: snapshotMonth,
+      snapshot_date: snapshotDate,
       license_key: acc.license_key,
       account_number: acc.account_number,
       broker: acc.broker,
@@ -48,20 +59,22 @@ export default async function handler(req, res) {
     }
 
     const { error: insertError } = await supabase
-    .from("monthly_account_snapshots")
-    .upsert(
-        rows,
-        {
-            onConflict: "snapshot_month,license_key,account_number",
-            ignoreDuplicates: true
-        }
-    );
+      .from("monthly_account_snapshots")
+      .upsert(rows, {
+        onConflict: "snapshot_month,license_key,account_number",
+        ignoreDuplicates: true,
+      });
 
     if (insertError) {
       return res.status(500).json({ ok: false, error: insertError.message });
     }
 
-    return res.json({ ok: true, inserted: rows.length });
+    return res.json({
+      ok: true,
+      inserted: rows.length,
+      snapshot_month: snapshotMonth,
+      snapshot_date: snapshotDate,
+    });
   } catch (err) {
     return res.status(500).json({ ok: false, error: err.message });
   }
