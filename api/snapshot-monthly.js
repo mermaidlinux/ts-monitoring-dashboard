@@ -44,8 +44,14 @@ export default async function handler(req, res) {
     }
 
     const { error: insertError } = await supabase
-      .from("monthly_account_snapshots")
-      .insert(rows);
+    .from("monthly_account_snapshots")
+    .upsert(
+        rows,
+        {
+            onConflict: "snapshot_month,license_key,account_number",
+            ignoreDuplicates: true
+        }
+    );
 
     if (insertError) {
       return res.status(500).json({ ok: false, error: insertError.message });
