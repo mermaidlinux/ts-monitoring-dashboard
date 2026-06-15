@@ -527,7 +527,7 @@ async function updateClientInfo(client) {
 
   function isOnline(updatedAt) {
     if (!updatedAt) return false
-    return Date.now() - new Date(updatedAt).getTime() < 60 * 1000
+    return Date.now() - new Date(updatedAt).getTime() < 3 * 60 * 1000
   }
 
   function checkAlerts(accountRows) {
