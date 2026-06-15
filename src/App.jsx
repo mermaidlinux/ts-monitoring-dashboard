@@ -732,7 +732,7 @@ async function updateClientInfo(client) {
   return (
     <div className="app">
       <aside className="sidebar">
-        <h2>ACCOUNT MONITOR V333 TEST</h2>
+        <h2>Account Monitor</h2>
         <p>Multi Account Risk Monitor</p>
 
         <button
