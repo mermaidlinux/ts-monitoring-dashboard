@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react'
 import { supabase } from './supabaseClient'
 import './App.css'
 
-const telegramBotToken = '8150207342:AAHTsRu6lyWzCxgMjeT4e3Ae6qnoHIPku-g
 const fallbackTelegramChatId = '598265545'
 const adminEmails = ['tradertechid@gmail.com']
 
@@ -368,15 +367,12 @@ function App() {
   }, [clientLicenseKey])
 
   async function sendTelegramAlert(message) {
-    const targetChatId = clientInfo?.telegram_chat_id || fallbackTelegramChatId
-
-    try {
-      await fetch(
-        `https://api.telegram.org/bot${telegramBotToken}/sendMessage?chat_id=${targetChatId}&text=${encodeURIComponent(message)}`
-      )
-    } catch (err) {
-      console.error('Telegram error:', err)
-    }
+    console.warn('Telegram alert disabled on frontend for security.', {
+      targetChatId: clientInfo?.telegram_chat_id || fallbackTelegramChatId,
+      message,
+    })
+  
+    alert('Telegram alert belum aktif. Token tidak boleh disimpan di App.jsx/frontend.')
   }
 
   function generateLicenseKey() {
