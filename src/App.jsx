@@ -367,12 +367,9 @@ function App() {
   }, [clientLicenseKey])
 
   async function sendTelegramAlert(message) {
-    console.warn('Telegram alert disabled on frontend for security.', {
-      targetChatId: clientInfo?.telegram_chat_id || fallbackTelegramChatId,
+    console.warn('Telegram frontend sender disabled for security.', {
       message,
     })
-  
-    alert('Telegram alert belum aktif. Token tidak boleh disimpan di App.jsx/frontend.')
   }
 
   function generateLicenseKey() {
