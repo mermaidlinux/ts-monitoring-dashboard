@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { supabase } from './supabaseClient'
 import './App.css'
 
-const telegramBotToken = '8150207342:AAHqDvOFxYWMb8kaUvgNzDbYGp8RJ95BJaM'
+const telegramBotToken = '8150207342:AAHTsRu6lyWzCxgMjeT4e3Ae6qnoHIPku-g
 const fallbackTelegramChatId = '598265545'
 const adminEmails = ['tradertechid@gmail.com']
 
